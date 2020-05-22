@@ -27,7 +27,7 @@ public class Tank {
 
     public Tank(TextureAtlas atlas, float x, float y) {
         this.position = new Vector2(x, y);
-        this.tmp = new Vector2(20, 20);
+        this.tmp = new Vector2(-10, -10);
         this.textures = new TextureRegion(atlas.findRegion("tankanim")).split(64, 64)[0];
         this.speed = 140.0f;
         this.timePerFrame = 0.08f;
