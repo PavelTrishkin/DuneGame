@@ -21,6 +21,7 @@ public class Projectile {
 
     public void setup(Vector2 startPosition, float angle) {
         velocity.set(200.0f * MathUtils.cosDeg(angle), 200.0f * MathUtils.sinDeg(angle));
+        shooting = false;
     }
 
     public void update(float dt) {

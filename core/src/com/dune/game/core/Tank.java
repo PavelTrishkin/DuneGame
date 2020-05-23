@@ -57,7 +57,6 @@ public class Tank {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             if (projectile.shooting){
-                projectile.shooting = false;
                 projectile.setup(startPosition(), angle);
             }
         }
