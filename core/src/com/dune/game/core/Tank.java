@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Tank extends GameObject {
+public class Tank extends GameObject{
 
     private Vector2 destination;
     private TextureRegion[] textures;
     private float angle;
     private float speed;
     private float rotationSpeed;
+    private boolean activeGathering;
 
     private float moveTimer;
     private float timePerFrame;
@@ -27,6 +28,11 @@ public class Tank extends GameObject {
         this.speed = 120.0f;
         this.timePerFrame = 0.08f;
         this.rotationSpeed = 90.0f;
+        this.activeGathering = false;
+    }
+
+    public boolean isActiveGathering() {
+        return activeGathering;
     }
 
     private int getCurrentFrameIndex() {
@@ -71,12 +77,24 @@ public class Tank extends GameObject {
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             fire();
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            activationGathering();
+        }
         checkBounds();
     }
 
     public void fire() {
         tmp.set(position).add(32 * MathUtils.cosDeg(angle), 32 * MathUtils.sinDeg(angle));
         gc.getProjectilesController().setup(tmp, angle);
+    }
+
+    public void activationGathering(){
+        if(!activeGathering){
+            activeGathering = true;
+        }else {
+            activeGathering = false;
+        }
+
     }
 
     public void checkBounds() {
