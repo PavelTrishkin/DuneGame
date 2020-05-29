@@ -22,10 +22,12 @@ public class Tank extends GameObject implements Poolable {
     private float angle;
     private float speed;
     private float rotationSpeed;
+    private boolean activeTank;
 
     private float moveTimer;
     private float timePerFrame;
     private int container;
+    private int maxValueContainer;
 
     @Override
     public boolean isActive() {
@@ -40,53 +42,77 @@ public class Tank extends GameObject implements Poolable {
     }
 
     public void setup(Owner ownerType, float x, float y) {
-        this.textures = Assets.getInstance().getAtlas().findRegion("tankanim").split(64,64)[0];
+        this.textures = Assets.getInstance().getAtlas().findRegion("tankanim").split(64, 64)[0];
         this.position.set(x, y);
         this.ownerType = ownerType;
         this.speed = 120.0f;
         this.hp = 100;
         this.weapon = new Weapon(Weapon.Type.HARVEST, 3.0f, 1);
         this.destination = new Vector2(position);
+        this.maxValueContainer = 50;
+        this.activeTank = false;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public boolean isActiveTank() {
+        return activeTank;
     }
 
     private int getCurrentFrameIndex() {
         return (int) (moveTimer / timePerFrame) % textures.length;
     }
 
+    private float getEmptySpaceInContainer() {
+        return (float) container / maxValueContainer;
+    }
+
     public void update(float dt) {
-        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-            destination.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            activeTank = false;
+            tmp.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+            if (tmp.epsilonEquals(position.x + 40, position.y + 40, 60)) {
+                activeTank = true;
+            }
         }
-        if (position.dst(destination) > 3.0f) {
-            float angleTo = tmp.set(destination).sub(position).angle();
-            if (Math.abs(angle - angleTo) > 3.0f) {
-                if (angle > angleTo) {
-                    if (Math.abs(angle - angleTo) <= 180.0f) {
-                        angle -= rotationSpeed * dt;
+        if (activeTank) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+                destination.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+            }
+            if (position.dst(destination) > 3.0f) {
+                float angleTo = tmp.set(destination).sub(position).angle();
+                if (Math.abs(angle - angleTo) > 3.0f) {
+                    if (angle > angleTo) {
+                        if (Math.abs(angle - angleTo) <= 180.0f) {
+                            angle -= rotationSpeed * dt;
+                        } else {
+                            angle += rotationSpeed * dt;
+                        }
                     } else {
-                        angle += rotationSpeed * dt;
-                    }
-                } else {
-                    if (Math.abs(angle - angleTo) <= 180.0f) {
-                        angle += rotationSpeed * dt;
-                    } else {
-                        angle -= rotationSpeed * dt;
+                        if (Math.abs(angle - angleTo) <= 180.0f) {
+                            angle += rotationSpeed * dt;
+                        } else {
+                            angle -= rotationSpeed * dt;
+                        }
                     }
                 }
-            }
-            if (angle < 0.0f) {
-                angle += 360.0f;
-            }
-            if (angle > 360.0f) {
-                angle -= 360.0f;
+                if (angle < 0.0f) {
+                    angle += 360.0f;
+                }
+                if (angle > 360.0f) {
+                    angle -= 360.0f;
+                }
+
+                moveTimer += dt;
+                tmp.set(speed, 0).rotate(angle);
+                position.mulAdd(tmp, dt);
+                if (position.dst(destination) < 120.0f && Math.abs(angleTo - angle) > 10) {
+                    position.mulAdd(tmp, -dt);
+                }
             }
 
-            moveTimer += dt;
-            tmp.set(speed, 0).rotate(angle);
-            position.mulAdd(tmp, dt);
-            if (position.dst(destination) < 120.0f && Math.abs(angleTo - angle) > 10) {
-                position.mulAdd(tmp, -dt);
-            }
         }
         updateWeapon(dt);
         checkBounds();
@@ -94,10 +120,11 @@ public class Tank extends GameObject implements Poolable {
 
     public void updateWeapon(float dt) {
         if (weapon.getType() == Weapon.Type.HARVEST) {
-            if (gc.getMap().getResourceCount(this) > 0) {
+            if (gc.getMap().getResourceCount(this) > 0 && container < maxValueContainer && activeTank) {
                 int result = weapon.use(dt);
                 if (result > -1) {
                     container += gc.getMap().harvestResource(this, result);
+
                 }
             } else {
                 weapon.reset();
@@ -129,5 +156,13 @@ public class Tank extends GameObject implements Poolable {
             batch.draw(progressbarTexture, position.x - 30, position.y + 32, 60 * weapon.getUsageTimePercentage(), 8);
             batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
+        if (container > 0) {
+            batch.setColor(0.2f, 0.2f, 0.0f, 1.0f);
+            batch.draw(progressbarTexture, position.x - 32, position.y - 45, 50, 12);
+            batch.setColor(1.0f, 0.2f, 0.0f, 1.0f);
+            batch.draw(progressbarTexture, position.x - 30, position.y - 43, 45 * getEmptySpaceInContainer(), 8);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
     }
 }
