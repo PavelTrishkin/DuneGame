@@ -1,16 +1,13 @@
 package com.dune.game.core;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+public class GameController {
 
-public class GameController {private BattleMap map;
+    private BattleMap map;
     private ProjectilesController projectilesController;
-    private Tank tank;
+    private TanksController tanksController;
 
-    public Tank getTank() {
-        return tank;
+    public TanksController getTanksController() {
+        return tanksController;
     }
 
     public ProjectilesController getProjectilesController() {
@@ -26,12 +23,15 @@ public class GameController {private BattleMap map;
         Assets.getInstance().loadAssets();
         this.map = new BattleMap();
         this.projectilesController = new ProjectilesController(this);
-        this.tank = new Tank(this, 200, 200);;
+        this.tanksController = new TanksController(this);
+        this.tanksController.setup(200, 200, Tank.Owner.PLAYER);
+        this.tanksController.setup(400, 400, Tank.Owner.PLAYER);
     }
 
     public void update(float dt) {
-        tank.update(dt);
+        tanksController.update(dt);
         projectilesController.update(dt);
+        map.update(dt);
         checkCollisions(dt);
     }
 
