@@ -3,10 +3,13 @@ package com.dune.game.core;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class GameObject {
-
     protected GameController gc;
     protected Vector2 position;
     protected Vector2 tmp;
+
+    public Vector2 getPosition() {
+        return position;
+    }
 
     public int getCellX() {
         return (int) (position.x / BattleMap.CELL_SIZE);
@@ -16,9 +19,8 @@ public abstract class GameObject {
         return (int) (position.y / BattleMap.CELL_SIZE);
     }
 
-
-    public Vector2 getPosition() {
-        return position;
+    public void moveBy(Vector2 value) {
+        position.add(value);
     }
 
     public GameObject(GameController gc) {

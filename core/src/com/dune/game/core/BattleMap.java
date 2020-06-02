@@ -6,51 +6,52 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class BattleMap {private class Cell {
-    private int cellX, cellY;
-    private int resource;
-    private float resourceRegenerationRate;
-    private float resourceRegenerationTime;
+public class BattleMap {
+    private class Cell {
+        private int cellX, cellY;
+        private int resource;
+        private float resourceRegenerationRate;
+        private float resourceRegenerationTime;
 
-    public Cell(int cellX, int cellY) {
-        this.cellX = cellX;
-        this.cellY = cellY;
-        if(MathUtils.random() < 0.1f) {
-            resource = MathUtils.random(1, 3);
+        public Cell(int cellX, int cellY) {
+            this.cellX = cellX;
+            this.cellY = cellY;
+            if(MathUtils.random() < 0.1f) {
+                resource = MathUtils.random(1, 3);
+            }
+            resourceRegenerationRate = MathUtils.random(5.0f) - 4.5f;
+            if (resourceRegenerationRate < 0.0f) {
+                resourceRegenerationRate = 0.0f;
+            } else {
+                resourceRegenerationRate *= 20.0f;
+                resourceRegenerationRate += 10.0f;
+            }
         }
-        resourceRegenerationRate = MathUtils.random(5.0f) - 4.5f;
-        if (resourceRegenerationRate < 0.0f) {
-            resourceRegenerationRate = 0.0f;
-        } else {
-            resourceRegenerationRate *= 20.0f;
-            resourceRegenerationRate += 10.0f;
-        }
-    }
 
-    private void update(float dt) {
-        if (resourceRegenerationRate > 0.01f) {
-            resourceRegenerationTime += dt;
-            if (resourceRegenerationTime > resourceRegenerationRate) {
-                resourceRegenerationTime = 0.0f;
-                resource++;
-                if (resource > 5) {
-                    resource = 5;
+        private void update(float dt) {
+            if (resourceRegenerationRate > 0.01f) {
+                resourceRegenerationTime += dt;
+                if (resourceRegenerationTime > resourceRegenerationRate) {
+                    resourceRegenerationTime = 0.0f;
+                    resource++;
+                    if (resource > 5) {
+                        resource = 5;
+                    }
+                }
+            }
+        }
+
+        private void render(SpriteBatch batch) {
+            if (resource > 0) {
+                float scale = 0.5f + resource * 0.2f;
+                batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, scale, scale, 0.0f);
+            } else {
+                if (resourceRegenerationRate > 0.01f) {
+                    batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, 0.1f, 0.1f, 0.0f);
                 }
             }
         }
     }
-
-    private void render(SpriteBatch batch) {
-        if (resource > 0) {
-            float scale = 0.5f + resource * 0.2f;
-            batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, scale, scale, 0.0f);
-        } else {
-            if (resourceRegenerationRate > 0.01f) {
-                batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, 0.1f, 0.1f, 0.0f);
-            }
-        }
-    }
-}
 
     public static final int COLUMNS_COUNT = 16;
     public static final int ROWS_COUNT = 9;

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class ProjectilesController extends ObjectPool<Projectile>{
+public class ProjectilesController extends ObjectPool<Projectile> {
     private GameController gc;
     private TextureRegion projectileTexture;
 
@@ -25,7 +25,7 @@ public class ProjectilesController extends ObjectPool<Projectile>{
     }
 
     public void setup(Vector2 srcPosition, float angle) {
-        Projectile p = getActiveElement();
+        Projectile p = activateObject();
         p.setup(srcPosition, angle, projectileTexture);
     }
 
