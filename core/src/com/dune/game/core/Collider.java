@@ -37,7 +37,10 @@ public class Collider {
                 AbstractUnit u = gc.getUnitsController().getUnits().get(j);
                 if (p.getOwner() != u && p.getPosition().dst(u.getPosition()) < 30) {
                     p.deactivate();
+                    u.attacked = true;
                     u.takeDamage(5);
+                }else {
+                    u.attacked = false;
                 }
             }
         }

@@ -30,12 +30,16 @@ public class Harvester extends AbstractUnit {
 
     public void updateWeapon(float dt) {
         if (gc.getMap().getResourceCount(position) > 0) {
-            int result = weapon.use(dt);
-            if (result > -1) {
-                container += gc.getMap().harvestResource(position, result);
-                if (container > containerCapacity) {
-                    container = containerCapacity;
+            if(!attacked) {
+                int result = weapon.use(dt);
+                if (result > -1) {
+                    container += gc.getMap().harvestResource(position, result);
+                    if (container > containerCapacity) {
+                        container = containerCapacity;
+                    }
                 }
+            }else {
+                weapon.reset();
             }
         } else {
             weapon.reset();

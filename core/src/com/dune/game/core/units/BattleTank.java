@@ -48,10 +48,12 @@ public class BattleTank extends AbstractUnit {
 
     @Override
     public void commandAttack(Targetable target) {
-        if (target.getType() == TargetType.UNIT && ((AbstractUnit) target).getOwnerType() != this.ownerType) {
-            this.target = target;
-        } else {
-            commandMoveTo(target.getPosition());
+        if(target != null) {  //вылетал нпе без этой проверки, решил проблему таким способом
+            if (target.getType() == TargetType.UNIT && ((AbstractUnit) target).getOwnerType() != this.ownerType) {
+                this.target = target;
+            } else {
+                commandMoveTo(target.getPosition());
+            }
         }
     }
 

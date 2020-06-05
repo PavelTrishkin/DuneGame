@@ -29,6 +29,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
 
     protected Targetable target;
     protected float minDstToActiveTarget;
+    public boolean attacked; //статус атакованного
 
     @Override
     public TargetType getType() {
@@ -46,12 +47,27 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
         return false;
     }
 
+    public Targetable getTarget() {
+        if(target != null) {
+            return target;
+        }
+        return null;
+    }
+
     public UnitType getUnitType() {
         return unitType;
     }
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getHpMax() {
+        return hpMax;
     }
 
     public void moveBy(Vector2 value) {
@@ -79,6 +95,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
         this.progressbarTexture = Assets.getInstance().getAtlas().findRegion("progressbar");
         this.timePerFrame = 0.08f;
         this.rotationSpeed = 90.0f;
+        this.attacked = false;
     }
 
     public abstract void setup(Owner ownerType, float x, float y);
