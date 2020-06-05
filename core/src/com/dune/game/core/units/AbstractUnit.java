@@ -48,10 +48,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
     }
 
     public Targetable getTarget() {
-        if(target != null) {
             return target;
-        }
-        return null;
     }
 
     public UnitType getUnitType() {
