@@ -1,6 +1,7 @@
 package com.dune.game.core.units;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.Assets;
 import com.dune.game.core.GameController;
@@ -29,6 +30,7 @@ public class Harvester extends AbstractUnit {
     }
 
     public void updateWeapon(float dt) {
+        weapon.setAngle(angle);
         if (gc.getMap().getResourceCount(position) > 0) {
             int result = weapon.use(dt);
             if (result > -1) {

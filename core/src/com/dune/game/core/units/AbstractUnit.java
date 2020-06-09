@@ -55,6 +55,14 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
         return weapon;
     }
 
+    public int getContainer() {
+        return container;
+    }
+
+    public void setContainer(int container) {
+        this.container = container;
+    }
+
     public void moveBy(Vector2 value) {
         boolean stayStill = false;
         if (position.dst(destination) < 3.0f) {

@@ -2,6 +2,7 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.dune.game.core.buildings.Storage;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.BattleTank;
 import com.dune.game.core.units.Owner;
@@ -9,12 +10,14 @@ import com.dune.game.core.units.UnitType;
 
 public class PlayerLogic {
     private GameController gc;
-    private int money;
+    private Storage storage;
+
     private int unitsCount;
     private int unitsMaxCount;
+    private int resources;
 
-    public int getMoney() {
-        return money;
+    public int getResources() {
+        return resources;
     }
 
     public int getUnitsCount() {
@@ -27,9 +30,9 @@ public class PlayerLogic {
 
     public PlayerLogic(GameController gc) {
         this.gc = gc;
-        this.money = 1000;
         this.unitsCount = 10;
         this.unitsMaxCount = 100;
+        this.resources = 0;
     }
 
     public void update(float dt) {
@@ -41,6 +44,7 @@ public class PlayerLogic {
                 }
             }
         }
+        resources = gc.getStorage().getResourcesAmount();
     }
 
     public void unitProcessing(AbstractUnit unit) {

@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.BattleTank;
+import com.dune.game.core.units.Harvester;
+import com.dune.game.core.units.UnitType;
 
 import java.util.List;
 
@@ -30,6 +32,12 @@ public class Collider {
                     tmp.scl(-1);
                     u1.moveBy(tmp);
                 }
+            }
+            float dst = gc.getStorage().getPosition().dst(u1.getPosition());
+            if (dst < 55 + 30){
+                float colLengthD2 = (85 - dst) / 2;
+                tmp.set(u1.getPosition()).sub(gc.getStorage().getPosition()).nor().scl(colLengthD2);
+                u1.moveBy(tmp);
             }
         }
         for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {

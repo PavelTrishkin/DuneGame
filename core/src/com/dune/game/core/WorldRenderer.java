@@ -30,10 +30,12 @@ public class WorldRenderer {
         gc.getUnitsController().render(batch);
         gc.getProjectilesController().render(batch);
         gc.getParticleController().render(batch);
+        gc.getStorage().render(batch);
         drawSelectionFrame();
         batch.end();
         ScreenManager.getInstance().resetCamera();
         gc.getStage().draw();
+
     }
 
     public void drawSelectionFrame() {

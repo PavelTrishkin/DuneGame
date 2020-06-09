@@ -26,7 +26,7 @@ public class GuiPlayerInfo extends Group {
 
     public void update(float dt) {
         tmpSB.clear();
-        tmpSB.append("MINERALS: ").append(playerLogic.getMoney());
+        tmpSB.append("MINERALS: ").append(playerLogic.getResources());
         money.setText(tmpSB);
         tmpSB.clear();
         tmpSB.append("UNITS: ").append(playerLogic.getUnitsCount()).append(" / ").append(playerLogic.getUnitsMaxCount());

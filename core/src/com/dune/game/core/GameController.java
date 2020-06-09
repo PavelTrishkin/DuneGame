@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.dune.game.core.buildings.Storage;
 import com.dune.game.core.gui.GuiPlayerInfo;
 import com.dune.game.core.units.AbstractUnit;
+import com.dune.game.core.units.Owner;
 import com.dune.game.screens.ScreenManager;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class GameController {
     private Vector2 mouse;
     private Collider collider;
     private Vector2 pointOfView;
+    private Storage storage;
 
     private List<AbstractUnit> selectedUnits;
 
@@ -91,7 +94,12 @@ public class GameController {
         this.particleController = new ParticleController();
         this.unitsController = new UnitsController(this);
         this.pointOfView = new Vector2(ScreenManager.HALF_WORLD_WIDTH, ScreenManager.HALF_WORLD_HEIGHT);
+        this.storage = new Storage(this);
         createGuiAndPrepareGameInput();
+    }
+
+    public Storage getStorage() {
+        return storage;
     }
 
     public void update(float dt) {
@@ -104,6 +112,7 @@ public class GameController {
         map.update(dt);
         collider.checkCollisions();
         particleController.update(dt);
+        storage.setup(Owner.PLAYER,600,600);
 //        for (int i = 0; i < 5; i++) {
 //            particleController.setup(mouse.x, mouse.y, MathUtils.random(-15.0f, 15.0f), MathUtils.random(-30.0f, 30.0f), 0.5f,
 //                    0.3f, 1.4f, 1, 1, 0, 1, 1, 0, 0, 0.5f);
@@ -112,6 +121,7 @@ public class GameController {
         ScreenManager.getInstance().resetCamera();
         stage.act(dt);
         changePOV(dt);
+        System.out.println(storage.getResourcesAmount());
     }
 
     public void changePOV(float dt) {
