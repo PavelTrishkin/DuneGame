@@ -91,12 +91,4 @@ public class UnitsController {
         }
         return null;
     }
-
-//    public AbstractUnit getNearestPlayerUnit() {
-//        for (int i = 0; i < playerUnits.size() ; i++) {
-//            AbstractUnit u = playerUnits.get(i);
-//            return u;
-//        }
-//
-//    }
 }
