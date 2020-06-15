@@ -1,11 +1,11 @@
-package com.dune.game.core;
+package com.dune.game.core.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.GameController;
+import com.dune.game.core.Projectile;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.BattleTank;
-import com.dune.game.core.units.Harvester;
-import com.dune.game.core.units.UnitType;
 
 import java.util.List;
 
@@ -33,18 +33,12 @@ public class Collider {
                     u1.moveBy(tmp);
                 }
             }
-            float dst = gc.getStorage().getPosition().dst(u1.getPosition());
-            if (dst < 55 + 30){
-                float colLengthD2 = (85 - dst) / 2;
-                tmp.set(u1.getPosition()).sub(gc.getStorage().getPosition()).nor().scl(colLengthD2);
-                u1.moveBy(tmp);
-            }
         }
         for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {
             Projectile p = gc.getProjectilesController().getActiveList().get(i);
             for (int j = 0; j < gc.getUnitsController().getUnits().size(); j++) {
                 AbstractUnit u = gc.getUnitsController().getUnits().get(j);
-                if (p.getOwner() != u && p.getPosition().dst(u.getPosition()) < 30) {
+                if (p.getOwner().getBaseLogic() != u.getBaseLogic() && p.getPosition().dst(u.getPosition()) < 30) {
                     for (int k = 0; k < 25; k++) {
                         tmp.set(p.getVelocity()).nor().scl(120.0f).add(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
                         gc.getParticleController().setup(

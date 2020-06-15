@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.dune.game.core.PlayerLogic;
+import com.dune.game.core.users_logic.PlayerLogic;
 
 public class GuiPlayerInfo extends Group {
     private PlayerLogic playerLogic;
@@ -26,7 +26,7 @@ public class GuiPlayerInfo extends Group {
 
     public void update(float dt) {
         tmpSB.clear();
-        tmpSB.append("MINERALS: ").append(playerLogic.getResources());
+        tmpSB.append("MINERALS: ").append(playerLogic.getMoney());
         money.setText(tmpSB);
         tmpSB.clear();
         tmpSB.append("UNITS: ").append(playerLogic.getUnitsCount()).append(" / ").append(playerLogic.getUnitsMaxCount());

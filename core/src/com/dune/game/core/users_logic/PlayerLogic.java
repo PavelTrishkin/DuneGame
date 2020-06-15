@@ -1,38 +1,23 @@
-package com.dune.game.core;
+package com.dune.game.core.users_logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.dune.game.core.buildings.Storage;
+import com.dune.game.core.BattleMap;
+import com.dune.game.core.Building;
+import com.dune.game.core.GameController;
 import com.dune.game.core.units.AbstractUnit;
-import com.dune.game.core.units.BattleTank;
-import com.dune.game.core.units.Owner;
-import com.dune.game.core.units.UnitType;
+import com.dune.game.core.units.types.Owner;
+import com.dune.game.core.units.types.UnitType;
 
-public class PlayerLogic {
-    private GameController gc;
-    private Storage storage;
+import javax.imageio.stream.ImageOutputStream;
 
-    private int unitsCount;
-    private int unitsMaxCount;
-    private int resources;
-
-    public int getResources() {
-        return resources;
-    }
-
-    public int getUnitsCount() {
-        return unitsCount;
-    }
-
-    public int getUnitsMaxCount() {
-        return unitsMaxCount;
-    }
-
+public class PlayerLogic extends BaseLogic {
     public PlayerLogic(GameController gc) {
         this.gc = gc;
+        this.money = 1000;
         this.unitsCount = 10;
         this.unitsMaxCount = 100;
-        this.resources = 0;
+        this.ownerType = Owner.PLAYER;
     }
 
     public void update(float dt) {
@@ -44,21 +29,29 @@ public class PlayerLogic {
                 }
             }
         }
-        resources = gc.getStorage().getResourcesAmount();
     }
 
     public void unitProcessing(AbstractUnit unit) {
         if (unit.getUnitType() == UnitType.HARVESTER) {
-            unit.commandMoveTo(gc.getMouse());
+            unit.commandMoveTo(gc.getMouse(), true);
             return;
         }
         if (unit.getUnitType() == UnitType.BATTLE_TANK) {
             AbstractUnit aiUnit = gc.getUnitsController().getNearestAiUnit(gc.getMouse());
-            if (aiUnit == null) {
-                unit.commandMoveTo(gc.getMouse());
-            } else {
+            if (aiUnit != null) {
                 unit.commandAttack(aiUnit);
+                return;
             }
+
+            int mouseCellX = (int) (gc.getMouse().x / BattleMap.CELL_SIZE);
+            int mouseCellY = (int) (gc.getMouse().y / BattleMap.CELL_SIZE);
+            Building b = gc.getMap().getBuildingFromCell(mouseCellX, mouseCellY);
+            if (b != null) {
+                unit.commandAttack(b);
+                return;
+            }
+            unit.commandMoveTo(gc.getMouse(), true);
+
         }
     }
 }
