@@ -2,6 +2,7 @@ package com.dune.game.core.users_logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.BattleMap;
 import com.dune.game.core.GameController;
 import com.dune.game.core.units.AbstractUnit;
@@ -19,6 +20,7 @@ public class AiLogic extends BaseLogic {
     private List<BattleTank> tmpAiBattleTanks;
     private List<Harvester> tmpPlayerHarvesters;
     private List<BattleTank> tmpPlayerBattleTanks;
+    private Vector2 tmp;
 
     public AiLogic(GameController gc) {
         this.gc = gc;
@@ -30,6 +32,7 @@ public class AiLogic extends BaseLogic {
         this.tmpPlayerHarvesters = new ArrayList<>();
         this.tmpPlayerBattleTanks = new ArrayList<>();
         this.timer = 10000.0f;
+        this.tmp = new Vector2();
     }
 
     public void update(float dt) {
@@ -43,6 +46,14 @@ public class AiLogic extends BaseLogic {
                 BattleTank aiBattleTank = tmpAiBattleTanks.get(i);
                 aiBattleTank.commandAttack(findNearestTarget(aiBattleTank, tmpPlayerBattleTanks));
             }
+        }
+    }
+
+    public void searchResources(){
+        ArrayList res = gc.getMap().getResources();
+
+        for (int i = 0; i < res.size(); i++) {
+            tmp.set(res.get(i).)
         }
     }
 
