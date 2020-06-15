@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.screens.utils.Assets;
 
+import java.util.ArrayList;
+
 public class BattleMap implements GameMap {
     private class Cell {
         private Building buildingCore;
